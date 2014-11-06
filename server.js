@@ -5,6 +5,8 @@ var config          = require('./server/config');
 var log             = require('./server/log')(module);
 var oauth2          = require('./server/oauth2');
 var articles        = require('./server/controllers/articlesController');
+var messages        = require('./server/controllers/messagesController');
+var users           = require('./server/controllers/usersController');
 var app = express();
 
 app.use(express.favicon());
@@ -40,26 +42,20 @@ app.get('/api/articles', passport.authenticate('bearer', { session: false }), ar
 app.get('/api/articles/:id', passport.authenticate('bearer', { session: false }), articles.getArticleById);
 app.post('/api/articles', passport.authenticate('bearer', { session: false }), articles.createArticle);
 app.put('/api/articles/:id', passport.authenticate('bearer', { session: false }), articles.updateArticle);
-app.delete('/api/articles/:id', passport.authenticate('bearer', { session: false }), articles.deleteArticle);;
+app.delete('/api/articles/:id', passport.authenticate('bearer', { session: false }), articles.deleteArticle);
+
+//Messages
+app.get('/api/messages/inbox', passport.authenticate('bearer', { session: false }), messages.getInbox);
+app.get('/api/messages/sent', passport.authenticate('bearer', { session: false }), messages.getSent);
+app.get('/api/messages/:id', passport.authenticate('bearer', { session: false }), messages.getMessageById);
+app.post('/api/messages/send/:username', passport.authenticate('bearer', { session: false }), messages.sendMessage);
 
 // Auth
 app.post('/oauth/token', oauth2.token);
 
-app.get('/api/userInfo', passport.authenticate('bearer', { session: false }), function(req, res) {    
-    var user = req.user;
-    // req.authInfo is set using the `info` argument supplied by
-    // `BearerStrategy`.  It is typically used to indicate scope of the token,
-    // and used in access control checks.  For illustrative purposes, this
-    // example simply returns the scope in the response.
-    res.send({ 
-            user: {
-                userId: user.userId,
-                username: user.username,
-                messages: user.messages
-            },
-            scope: req.authInfo.scope 
-        });
-});
+// Users
+app.get('/api/userInfo', passport.authenticate('bearer', { session: false }), users.userInfo);
+app.get('/api/users', passport.authenticate('bearer', { session: false }), users.getAllUsers);
 
 app.get('/ErrorExample', function(req, res, next){
     next(new Error('Random error!'));
