@@ -1,0 +1,20 @@
+.row
+  .col-sm-4.col-lg-4.col-md-4(ng-repeat="item in items | limitTo: num")
+    .thumbnail
+      a(href='#/items/{{item._id}}' title="{{ item.title }}")                    
+        .ratio(style="background-image:url('images/{{ item.imageUrl }}')" ng-if="item.imageUrl")
+        .ratio(style="background-image:url('images/default.jpg')" ng-if="!item.imageUrl")
+      .caption
+        h4.price-tag.pull-right ${{ item.price }}
+        h4.truncate
+          a(href='#/items/{{item._id}}') {{ item.title }}
+        p.truncate {{ item.description }}
+      .ratings
+        p.pull-right 15 reviews
+        p
+          span.glyphicon.glyphicon-star
+          span.glyphicon.glyphicon-star
+          span.glyphicon.glyphicon-star
+          span.glyphicon.glyphicon-star
+          span.glyphicon.glyphicon-star
+        a.btn.btn-success.btn-block(ng-if="user._id === item.owner" href="#/items/{{ item._id }}/edit") Edit

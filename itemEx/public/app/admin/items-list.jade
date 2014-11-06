@@ -1,0 +1,26 @@
+.container-fluid()
+    .row
+        .col-md-3
+            div(ng-include="'partials/admin/admin-panel-navigation'")
+        .col-md-9
+            table.table
+                h3 Items
+                hr
+                row
+                    .col-md-4
+                        .input-group
+                            input.form-control(type="text" placeholder="Search" ng-model="request.title" ng-keyup="$event.keyCode == 13 && filter(request)")
+                            .input-group-btn
+                                button.btn.btn-default(ng-click="filter(request)")
+                                    i.glyphicon.glyphicon-search
+
+                    .col-md-8(pager)
+                .row
+                    tr
+                        th Title
+                        th Price
+                        th Date
+                    tr(ng-repeat="item in items")
+                        td {{ item.title }}
+                        td {{ item.price }}
+                        td {{ item.date | date }}

@@ -1,0 +1,30 @@
+.container 
+   .row
+        .col-md-4
+            h2 {{item.title}}
+            .thumbnail
+                  img(src="images/{{ item.imageUrl }}", alt="{{ item.title }}")
+            p 
+                strong Description:
+            p.text-info {{item.description}}
+        .col-md-4.col-md-offset-4
+            .row.well
+                h3 {{item.price}}$
+                br
+                strong Published on:
+                |  {{item.published | date: 'MMM dd, yyyy'}}
+            .row.well
+                div
+                    strong User:
+                    a(href="#/users/{{item.owner._id}}")  {{item.owner.firstName + ' ' + item.owner.lastName}}
+                    br
+                    div
+                        strong City:
+                        |  {{item.owner.city}}
+                        br
+                    div
+                        strong Contact:
+                        |  {{item.owner.phone}}
+                    br
+                    div
+                        button.btn.btn-info(ng-click="goToSendMessagePage()") Send message

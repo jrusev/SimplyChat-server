@@ -1,0 +1,6 @@
+div(ng-repeat="item in items | orderBy: '-published' | limitTo: 10")
+    .row
+        .col-md-3
+            | {{ item.published | date: 'MMM d yyyy' }}
+        .col-md-9
+            a(href="#/items/{{ item._id }}") {{ item.title }}

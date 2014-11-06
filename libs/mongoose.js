@@ -17,7 +17,7 @@ var Schema = mongoose.Schema;
 
 // Article
 
-var Images = new Schema({
+var Image = new Schema({
     kind: {
         type: String,
         enum: ['thumbnail', 'detail'],
@@ -30,7 +30,7 @@ var Article = new Schema({
     title: { type: String, required: true },
     author: { type: String, required: true },
     description: { type: String, required: true },
-    images: [Images],
+    images: [Image],
     modified: { type: Date, default: Date.now }
 });
 
@@ -40,26 +40,36 @@ Article.path('title').validate(function (v) {
 
 var ArticleModel = mongoose.model('Article', Article);
 
+// Message
+
+var Message = new mongoose.Schema({
+    title: { type: String, required: '{PATH} is required' },
+    content: { type: String, required: '{PATH} is required' },
+    date: { type: Date, default: Date.now },
+    from : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    to: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    read: Boolean
+});
+
+var MessageModel = mongoose.model('Message', Message);
+
 // User
 
 var User = new Schema({
-    username: {
-        type: String,
-        unique: true,
-        required: true
-    },
-    hashedPassword: {
-        type: String,
-        required: true
-    },
-    salt: {
-        type: String,
-        required: true
-    },
-    created: {
-        type: Date,
-        default: Date.now
-    }
+    username: { type: String, unique: true, required: true },
+    firstName: { type: String, require: '{PATH} is required' },
+    lastName: { type: String, require: '{PATH} is required' },
+    imageUrl: String,
+    hashedPassword: { type: String, required: true },
+    salt: { type: String, required: true },
+    created: { type: Date, default: Date.now },
+    messages: [mongoose.model('Message').schema],
 });
 
 User.methods.encryptPassword = function(password) {
@@ -159,6 +169,7 @@ var RefreshTokenModel = mongoose.model('RefreshToken', RefreshToken);
 
 module.exports.mongoose = mongoose;
 module.exports.ArticleModel = ArticleModel;
+module.exports.MessageModel = MessageModel;
 module.exports.UserModel = UserModel;
 module.exports.ClientModel = ClientModel;
 module.exports.AccessTokenModel = AccessTokenModel;

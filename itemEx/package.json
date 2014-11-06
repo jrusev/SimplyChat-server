@@ -1,0 +1,53 @@
+{
+  "name": "End-to-end-JS-Apps-Teamwork",
+  "version": "1.0.0",
+  "description": "'MEAN Stack Application'",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.4.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TeamDionysus/End-to-end-JS-Apps-Teamwork.git"
+  },
+  "author": "StefanSinapov, valentin-lozev, neutrino-git, izabelk",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TeamDionysus/End-to-end-JS-Apps-Teamwork/issues"
+  },
+  "homepage": "https://github.com/TeamDionysus/End-to-end-JS-Apps-Teamwork",
+  "dependencies": {
+    "body-parser": "^1.9.0",
+    "cookie-parser": "^1.3.3",
+    "express": "^4.9.5",
+    "express-session": "^1.8.2",
+    "formidable": "^1.0.15",
+    "fs": "0.0.2",
+    "jade": "^1.7.0",
+    "jsonwebtoken": "~1.1.1",
+    "mongoose": "^3.8.17",
+    "passport": "^0.2.1",
+    "passport-local": "^1.0.0",
+    "socketio-jwt": "^2.3.5",
+    "socket.io": "^1.0.4",
+    "socket.io-client": "^1.0.4",
+    "stylus": "^0.49.1"
+  },
+  "devDependencies": {
+    "bower": "latest",
+    "chai": "^1.9.2",
+    "grunt": "latest",
+    "grunt-concurrent": "~0.5.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-express-server": "^0.4.17",
+    "grunt-nodemon": "~0.3.0",
+    "grunt-open": "^0.2.3",
+    "load-grunt-tasks": "^0.4.0",
+    "should": "^4.0.4"
+  }
+}

@@ -142,11 +142,13 @@ app.post('/oauth/token', oauth2.token);
 app.get('/api/userInfo',
     passport.authenticate('bearer', { session: false }),
         function(req, res) {
+            var user = req.user;
             // req.authInfo is set using the `info` argument supplied by
             // `BearerStrategy`.  It is typically used to indicate scope of the token,
             // and used in access control checks.  For illustrative purposes, this
             // example simply returns the scope in the response.
-            res.json({ user_id: req.user.userId, name: req.user.username, scope: req.authInfo.scope })
+            // res.json({ user_id: req.user.userId, name: req.user.username, scope: req.authInfo.scope })
+            res.send({ user: {userId: user.userId, username: user.username, messages: user.messages}, scope: req.authInfo.scope });
         }
 );
 
