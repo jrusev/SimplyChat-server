@@ -1,8 +1,8 @@
-var log             = require('../log')(module);
-var ArticleModel    = require('../mongoose').ArticleModel;
+var log        = require('../log')(module);
+var Article    = require('../models').Article;
 
 var getAllArticles = function(req, res) {
-    return ArticleModel.find(function (err, articles) {
+    return Article.find(function (err, articles) {
         if (!err) {
             return res.send(articles);
         } else {
@@ -14,7 +14,7 @@ var getAllArticles = function(req, res) {
 };
 
 var getArticleById = function(req, res) {
-    return ArticleModel.findById(req.params.id, function (err, article) {
+    return Article.findById(req.params.id, function (err, article) {
         if(!article) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });
@@ -30,7 +30,7 @@ var getArticleById = function(req, res) {
 };
 
 var createArticle = function(req, res) {
-    var article = new ArticleModel({
+    var article = new Article({
         title: req.body.title,
         author: req.body.author,
         description: req.body.description,
@@ -56,7 +56,7 @@ var createArticle = function(req, res) {
 };
 
 var updateArticle = function(req, res) {
-    return ArticleModel.findById(req.params.id, function (err, article) {
+    return Article.findById(req.params.id, function (err, article) {
         if(!article) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });
@@ -85,7 +85,7 @@ var updateArticle = function(req, res) {
 };
 
 var deleteArticle = function(req, res) {
-    return ArticleModel.findById(req.params.id, function (err, article) {
+    return Article.findById(req.params.id, function (err, article) {
         if(!article) {
             res.statusCode = 404;
             return res.send({ error: 'Not found' });

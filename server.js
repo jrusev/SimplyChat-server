@@ -5,6 +5,8 @@ var config          = require('./server/config');
 var log             = require('./server/log')(module);
 var app = express();
 
+require('./server/mongoose');
+
 app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.bodyParser());

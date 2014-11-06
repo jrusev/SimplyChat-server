@@ -1,5 +1,5 @@
-var log             = require('../log')(module);
-var User    = require('../mongoose').UserModel;
+var log     = require('../log')(module);
+var User    = require('../models').User;
 
 var profile = function(req, res) {    
     var user = req.user;

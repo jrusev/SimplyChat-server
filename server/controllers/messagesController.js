@@ -1,8 +1,8 @@
 'use strict';
 
 var log         = require('../log')(module);
-var User        = require('../mongoose').UserModel;
-var Message     = require('../mongoose').MessageModel;
+var User        = require('../models').User;
+var Message     = require('../models').Message;
 
 module.exports = {
     getInbox : function (req, res, next) {
