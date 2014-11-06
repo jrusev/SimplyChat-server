@@ -2,6 +2,7 @@
 
 var log         = require('../log')(module);
 var User        = require('../mongoose').UserModel;
+var Message     = require('../mongoose').MessageModel;
 
 module.exports = {
     getInbox : function (req, res, next) {
