@@ -1,10 +1,10 @@
 var log                 = require('./server/log')(module);
 var mongoose            = require('./server/mongoose').mongoose;
-var UserModel           = require('./server/mongoose').UserModel;
-var ClientModel         = require('./server/mongoose').ClientModel;
-var MessageModel        = require('./server/mongoose').MessageModel;
-var AccessTokenModel    = require('./server/mongoose').AccessTokenModel;
-var RefreshTokenModel   = require('./server/mongoose').RefreshTokenModel;
+var UserModel           = require('./server/models').User;
+var ClientModel         = require('./server/models').Client;
+var MessageModel        = require('./server/models').Message;
+var AccessTokenModel    = require('./server/models').AccessToken;
+var RefreshTokenModel   = require('./server/models').RefreshToken;
 
 
 var faker               = require('Faker');

@@ -18,3 +18,5 @@ db.once('open', function callback () {
 require('./models');
 
 // seed db
+
+module.exports.mongoose = mongoose;
