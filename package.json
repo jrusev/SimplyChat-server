@@ -1,11 +1,12 @@
 {
-    "name": "NodeAPI",
+    "name": "SimplyChat",
     "version": "0.1.0",
-    "author": "Evgeny Aleksandrov",
-    "description": "simple example of RESTful API with Node.js",
+    "author": "Jivko Rusev",
+    "description": "RESTful API for SimplyChat",
+    "main": "server.js",
     "private": true,
     "scripts": {
-        "start": "node ./server.js"
+        "start": "node server.js"
     },
     "dependencies" : {
         "express"       : "3.3.x",

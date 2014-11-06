@@ -29,7 +29,7 @@ app.use(function(err, req, res, next){
     return;
 });
 
-// Congifure routes
+// Configure routes
 require('./server/routes')(app);
 
 app.listen(config.get('port'), function(){
