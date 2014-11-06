@@ -1,9 +1,9 @@
-var log                 = require('./libs/log')(module);
-var mongoose            = require('./libs/mongoose').mongoose;
-var UserModel           = require('./libs/mongoose').UserModel;
-var ClientModel         = require('./libs/mongoose').ClientModel;
-var AccessTokenModel    = require('./libs/mongoose').AccessTokenModel;
-var RefreshTokenModel   = require('./libs/mongoose').RefreshTokenModel;
+var log                 = require('./server/log')(module);
+var mongoose            = require('./server/mongoose').mongoose;
+var UserModel           = require('./server/mongoose').UserModel;
+var ClientModel         = require('./server/mongoose').ClientModel;
+var AccessTokenModel    = require('./server/mongoose').AccessTokenModel;
+var RefreshTokenModel   = require('./server/mongoose').RefreshTokenModel;
 var faker               = require('Faker');
 
 UserModel.remove({}, function(err) {
