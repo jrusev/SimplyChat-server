@@ -28,7 +28,7 @@ module.exports = {
     },
     logout: function (req, res, next) {
         req.logout();
-        res.end();
+        res.send({ status: 'Ok', message: 'Successful logout.' });
     },
     isAuthenticated: function (req, res, next) {
         if (!req.isAuthenticated()) {

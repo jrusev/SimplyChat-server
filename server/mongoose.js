@@ -41,7 +41,6 @@ Article.path('title').validate(function (v) {
 var ArticleModel = mongoose.model('Article', Article);
 
 // Message
-
 var Message = new mongoose.Schema({
     title: { type: String, required: '{PATH} is required' },
     content: { type: String, required: '{PATH} is required' },
@@ -60,7 +59,6 @@ var Message = new mongoose.Schema({
 var MessageModel = mongoose.model('Message', Message);
 
 // User
-
 var User = new Schema({
     username: { type: String, unique: true, required: true },
     firstName: { type: String, require: '{PATH} is required' },

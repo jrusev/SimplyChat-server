@@ -13,7 +13,7 @@ app.use(express.methodOverride());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, "public")));
 
-require('./server/auth');
+require('./server/passport-config');
 
 app.use(function(req, res, next){
     res.status(404);

@@ -27,10 +27,14 @@ module.exports = function (app) {
     app.post('/api/messages/send/:username', passport.authenticate('bearer', { session: false }), messages.sendMessage);
 
     // Auth
-    app.post('/oauth/token', oauth2.token);
-
+    app.post('/auth/token', oauth2.token); // login 
+    app.post('/auth/logout', function (req, res, next) { 
+        req.logout(); // does not work!
+        res.send({ message: 'Successful logout.' });
+    });   
+    
     // Users
-    app.get('/api/userInfo', passport.authenticate('bearer', { session: false }), users.userInfo);
+    app.get('/api/users/profile', passport.authenticate('bearer', { session: false }), users.profile);
     app.get('/api/users', passport.authenticate('bearer', { session: false }), users.getAllUsers);
 
     app.get('/ErrorExample', function(req, res, next){
