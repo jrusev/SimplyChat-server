@@ -4,7 +4,7 @@ var passport        = require('passport');
 var config          = require('./libs/config');
 var log             = require('./libs/log')(module);
 var oauth2          = require('./libs/oauth2');
-var ArticleModel    = require('./libs/mongoose').ArticleModel;
+var articles        = require('./libs/controllers/articlesController');
 var app = express();
 
 app.use(express.favicon());
@@ -35,108 +35,15 @@ app.get('/api', passport.authenticate('bearer', { session: false }), function (r
     res.send('API is running');
 });
 
-app.get('/api/articles', passport.authenticate('bearer', { session: false }), function(req, res) {
-    return ArticleModel.find(function (err, articles) {
-        if (!err) {
-            return res.send(articles);
-        } else {
-            res.statusCode = 500;
-            log.error('Internal error(%d): %s',res.statusCode,err.message);
-            return res.send({ error: 'Server error' });
-        }
-    });
-});
+// Articles
+app.all('/api/articles/*', passport.authenticate('bearer', { session: false }))
+    .get('/api/articles', articles.getAllArticles)
+    .get('/api/articles/:id', articles.getArticleById)
+    .post('/api/articles', articles.createArticle)
+    .put('/api/articles/:id', articles.updateArticle)
+    .delete('/api/articles/:id', articles.deleteArticle);
 
-app.post('/api/articles', passport.authenticate('bearer', { session: false }), function(req, res) {
-    var article = new ArticleModel({
-        title: req.body.title,
-        author: req.body.author,
-        description: req.body.description,
-        images: req.body.images
-    });
-
-    article.save(function (err) {
-        if (!err) {
-            log.info("article created");
-            return res.send({ status: 'OK', article:article });
-        } else {
-            console.log(err);
-            if(err.name == 'ValidationError') {
-                res.statusCode = 400;
-                res.send({ error: 'Validation error' });
-            } else {
-                res.statusCode = 500;
-                res.send({ error: 'Server error' });
-            }
-            log.error('Internal error(%d): %s',res.statusCode,err.message);
-        }
-    });
-});
-
-app.get('/api/articles/:id', passport.authenticate('bearer', { session: false }), function(req, res) {
-    return ArticleModel.findById(req.params.id, function (err, article) {
-        if(!article) {
-            res.statusCode = 404;
-            return res.send({ error: 'Not found' });
-        }
-        if (!err) {
-            return res.send({ status: 'OK', article:article });
-        } else {
-            res.statusCode = 500;
-            log.error('Internal error(%d): %s',res.statusCode,err.message);
-            return res.send({ error: 'Server error' });
-        }
-    });
-});
-
-app.put('/api/articles/:id', passport.authenticate('bearer', { session: false }), function (req, res){
-    return ArticleModel.findById(req.params.id, function (err, article) {
-        if(!article) {
-            res.statusCode = 404;
-            return res.send({ error: 'Not found' });
-        }
-
-        article.title = req.body.title;
-        article.description = req.body.description;
-        article.author = req.body.author;
-        article.images = req.body.images;
-        return article.save(function (err) {
-            if (!err) {
-                log.info("article updated");
-                return res.send({ status: 'OK', article:article });
-            } else {
-                if(err.name == 'ValidationError') {
-                    res.statusCode = 400;
-                    res.send({ error: 'Validation error' });
-                } else {
-                    res.statusCode = 500;
-                    res.send({ error: 'Server error' });
-                }
-                log.error('Internal error(%d): %s',res.statusCode,err.message);
-            }
-        });
-    });
-});
-
-app.delete('/api/articles/:id', passport.authenticate('bearer', { session: false }), function (req, res){
-    return ArticleModel.findById(req.params.id, function (err, article) {
-        if(!article) {
-            res.statusCode = 404;
-            return res.send({ error: 'Not found' });
-        }
-        return article.remove(function (err) {
-            if (!err) {
-                log.info("article removed");
-                return res.send({ status: 'OK' });
-            } else {
-                res.statusCode = 500;
-                log.error('Internal error(%d): %s',res.statusCode,err.message);
-                return res.send({ error: 'Server error' });
-            }
-        });
-    });
-});
-
+// Auth
 app.post('/oauth/token', oauth2.token);
 
 app.get('/api/userInfo',
