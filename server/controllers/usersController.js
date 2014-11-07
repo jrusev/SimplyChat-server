@@ -21,7 +21,7 @@ var profile = function(req, res) {
 var getAllUsers = function(req, res) {
     return User.find(function (err, users) {
         if (!err) {
-            return res.send(users);
+            return res.send({ users: users});
         } else {
             res.statusCode = 500;
             log.error('Internal error(%d): %s',res.statusCode,err.message);
