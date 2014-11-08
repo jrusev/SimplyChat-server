@@ -27,11 +27,16 @@ UserModel.remove({}, function(err) {
     });
 
     for(i=0; i<4; i++) {
+        var firstName = faker.random.first_name();
+        var lastName = faker.random.last_name();
+        var username = firstName.toLowerCase()[0] + lastName.toLowerCase();
+        
         var user = new UserModel({ 
-            username: faker.random.first_name().toLowerCase(),
-            password: faker.Lorem.words(1)[0],
-            firstName: faker.random.first_name(),
-            lastName: faker.random.last_name()
+            username: username,
+//            password: faker.Lorem.words(1)[0],
+            password: username,
+            firstName: firstName,
+            lastName: lastName
         });
         user.save(function(err, user) {
             if(err) return log.error(err);

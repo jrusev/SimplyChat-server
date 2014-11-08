@@ -62,7 +62,6 @@ module.exports = {
                             return log('Messages could not be loaded: ' + err);
                         }
                         
-                        console.log(messages);
                         res.send({messages:messages});            
                         // Mark as read after sent
                         messages.forEach(function (m) {
@@ -118,27 +117,47 @@ module.exports = {
                     return res.status(404).send({message: 'You cannot send message to your self!'});                    
                 }
                 
-                var newMessage = new Message({
+                var message = new Message({
                     title: req.body.title,
                     content: req.body.content,
                     date: new Date(),
-                    from: sender._id,
-                    to: receiver._id,
+                    from: sender,
+                    to: receiver,
                     isRead: false
-                });
-
-                newMessage.save(function (err) {
+                });                
+                message.save(function (err) {
                     if (err) {
                         res.status(400).send(err);
                         return log('Error in saving message' + err);
                     }
-
-                    res.send(newMessage);
+                    
+                    // Send the user view models
+                    var messageViewModel = {
+                        title: message.title,
+                        content: message.content,
+                        date: message.date,
+                        isRead: message.isRead
+                    };
+                    messageViewModel.from = { 
+                        userId: sender.userId,
+                        username: sender.username,
+                        firstName: sender.firstName,
+                        lastName: sender.lastName,
+                        imageUrl: sender.imageUrl
+                    };
+                    messageViewModel.to = { 
+                        userId: receiver.userId,
+                        username: receiver.username,
+                        firstName: receiver.firstName,
+                        lastName: receiver.lastName,
+                        imageUrl: receiver.imageUrl
+                    };
+                    res.send({message:messageViewModel});
                     
                     // Send push notification for new message to the receiver
                 });
                 
-                receiver.messages.push(newMessage);
+                receiver.messages.push(message);
                 receiver.save(); 
             } else {
                 res.status(404).send('User not found!');
