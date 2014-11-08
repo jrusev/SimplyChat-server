@@ -19,7 +19,7 @@ module.exports = {
                 res.send(messages);            
                 // Mark as read after sent
                 messages.forEach(function (m) {
-                    m.read = true;
+                    m.isRead = true;
                     m.save();
                 });
             });
@@ -38,7 +38,48 @@ module.exports = {
                 res.send(messages);
             });
     },
+    getAllWithUser : function (req, res, next) {
+        // GET /api/messages/withUser/:username
+        var currentUser = req.user;
+        User.findOne({ username: req.params.username }).exec(function (err, otherUser) {
+            if (otherUser) {
+                
+                if (otherUser._id.equals(currentUser._id)) {
+                    return res.status(404).send({message: 'You cannot have messages from yourself!'});                    
+                }
+                
+                Message.find({ 
+                        $or: 
+                        [
+                         { $and:[ {'from': currentUser._id}, {'to': otherUser._id} ] },
+                         { $and:[ {'from': otherUser._id}, {'to': currentUser._id} ] }
+                        ]
+                    })
+                    .populate('from to', 'username firstName lastName imageUrl')
+                    .exec(function (err, messages) {
+                        if (err) {
+                            res.send(err);
+                            return log('Messages could not be loaded: ' + err);
+                        }
+                        
+                        console.log(messages);
+                        res.send({messages:messages});            
+                        // Mark as read after sent
+                        messages.forEach(function (m) {
+                            if (!m.isRead && m.to._id.equals(currentUser._id)) {
+                                m.isRead = true;
+                                m.save();
+                            }
+                        });
+                    });
+                
+            } else {
+                res.status(404).send('Other user not found!');
+            }
+        });
+    },
     getMessageById: function (req, res, next) {
+        // GET /api/messages/:id
         var currentUser = req.user;
         Message.findOne(
             { 
@@ -58,8 +99,8 @@ module.exports = {
                 if (message) {
                     res.send(message);
                     // Mark as read
-                    if (!message.read && message.to.username == currentUser.username) {
-                        message.read = true;
+                    if (!message.isRead && message.to.username == currentUser.username) {
+                        message.isRead = true;
                         message.save();
                     }
                 } else {
@@ -68,7 +109,7 @@ module.exports = {
             });
     },
     sendMessage: function (req, res, next) {
-        //api/messages/send/:username
+        // POST api/messages/send/:username
         var sender = req.user;
         User.findOne({ username: req.params.username }).exec(function (err, receiver) {
             if (receiver) {
@@ -83,7 +124,7 @@ module.exports = {
                     date: new Date(),
                     from: sender._id,
                     to: receiver._id,
-                    read: false
+                    isRead: false
                 });
 
                 newMessage.save(function (err) {

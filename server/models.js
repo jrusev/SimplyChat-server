@@ -40,7 +40,7 @@ var Message = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
-    read: Boolean
+    isRead: Boolean
 });
 
 var MessageModel = mongoose.model('Message', Message);

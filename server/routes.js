@@ -24,6 +24,7 @@ module.exports = function (app) {
     app.get('/api/messages/inbox', passport.authenticate('bearer', { session: false }), messages.getInbox);
     app.get('/api/messages/sent', passport.authenticate('bearer', { session: false }), messages.getSent);
     app.get('/api/messages/:id', passport.authenticate('bearer', { session: false }), messages.getMessageById);
+    app.get('/api/messages/withUser/:username', passport.authenticate('bearer', { session: false }), messages.getAllWithUser);
     app.post('/api/messages/send/:username', passport.authenticate('bearer', { session: false }), messages.sendMessage);
 
     // Auth
