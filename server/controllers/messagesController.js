@@ -45,8 +45,8 @@ module.exports = {
             if (otherUser) {
 
                 if (otherUser._id.equals(currentUser._id)) {
-                    console.log('You cannot have messages from yourself!');
-                    return res.status(404).send({error: 'You cannot have messages from yourself!'});                    
+                    console.log('You cannot receive messages from yourself!');
+                    return res.status(404).send({error: 'You cannot receive messages from yourself!'});                    
                 }
                 
                 var messageQuery = Message.find({ 
@@ -169,7 +169,7 @@ module.exports = {
                 receiver.messages.push(message);
                 receiver.save(); 
             } else {
-                res.status(404).send('User not found!');
+                res.status(404).send({error:'User not found!'});
             }
         });
     }
