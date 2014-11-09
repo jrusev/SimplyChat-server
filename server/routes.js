@@ -35,7 +35,8 @@ module.exports = function (app) {
     });   
     
     // Users
-    app.get('/api/users/profile', passport.authenticate('bearer', { session: false }), users.profile);
+    app.get('/api/users/currentUser', passport.authenticate('bearer', { session: false }), users.currentUser);
+    app.get('/api/users/byUsername:username', passport.authenticate('bearer', { session: false }), users.byUsername);
     app.get('/api/users', passport.authenticate('bearer', { session: false }), users.getAllUsers);
 
     app.get('/ErrorExample', function(req, res, next){

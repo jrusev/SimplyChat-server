@@ -18,8 +18,10 @@ UserModel.remove({}, function(err) {
     var user = new UserModel({
         username: "admin",
         password: "admin",
-        firstName: faker.random.first_name(),
-        lastName: faker.random.last_name()
+        firstName: "Jivko",
+        lastName: "Rusev",
+        city: "Sofia",
+        //imageUrl: faker.Image.UIFaces.avatar()
     });
     user.save(function(err, user) {
         if(err) return log.error(err);
@@ -36,7 +38,9 @@ UserModel.remove({}, function(err) {
 //            password: faker.Lorem.words(1)[0],
             password: username,
             firstName: firstName,
-            lastName: lastName
+            lastName: lastName,
+            city: faker.Address.city(),
+            imageUrl: faker.Image.UIFaces.avatar()
         });
         user.save(function(err, user) {
             if(err) return log.error(err);

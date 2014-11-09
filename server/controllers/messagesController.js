@@ -152,14 +152,16 @@ module.exports = {
                         username: sender.username,
                         firstName: sender.firstName,
                         lastName: sender.lastName,
-                        imageUrl: sender.imageUrl
+                        imageUrl: sender.imageUrl,
+                        city: sender.city
                     };
                     messageViewModel.to = { 
                         userId: receiver.userId,
                         username: receiver.username,
                         firstName: receiver.firstName,
                         lastName: receiver.lastName,
-                        imageUrl: receiver.imageUrl
+                        imageUrl: receiver.imageUrl,
+                        city: receiver.city
                     };
                     res.send({message:messageViewModel});
                     

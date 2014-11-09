@@ -55,6 +55,7 @@ var User = new Schema({
     salt: { type: String, required: true },
     created: { type: Date, default: Date.now },
     messages: [mongoose.model('Message').schema],
+    city: String
 });
 
 User.methods.encryptPassword = function(password) {
