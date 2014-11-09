@@ -40,53 +40,51 @@ module.exports = {
     },
     getAllWithUser : function (req, res, next) {
         // GET /api/messages/withUser/:username?unread=true
-        var currentUser = req.user;
-        var unread = req.query.unread || false;
-        
-        var query = User.findOne({ username: req.params.username });
-        
-        if (unread) {
-            query.where({isRead: false});
-        }
-        
-        
-//        User.findOne({ username: req.params.username })
-//            //.where({ isRead: req.query.status !== 'unread'})
-            query.exec(function (err, otherUser) {
-                if (otherUser) {
+        var currentUser = req.user;        
+        User.findOne({ username: req.params.username }).exec(function (err, otherUser) {
+            if (otherUser) {
 
-                    if (otherUser._id.equals(currentUser._id)) {
-                        return res.status(404).send({message: 'You cannot have messages from yourself!'});                    
-                    }
-
-                    Message.find({ 
-                            $or: 
-                            [
-                             { $and:[ {'from': currentUser._id}, {'to': otherUser._id} ] },
-                             { $and:[ {'from': otherUser._id}, {'to': currentUser._id} ] }
-                            ]
-                        })
-                        .populate('from to', 'username firstName lastName imageUrl')
-                        .exec(function (err, messages) {
-                            if (err) {
-                                res.send(err);
-                                return log('Messages could not be loaded: ' + err);
-                            }
-
-                            res.send({messages:messages});            
-                            // Mark as read after sent
-                            messages.forEach(function (m) {
-                                if (!m.isRead && m.to._id.equals(currentUser._id)) {
-                                    m.isRead = true;
-                                    m.save();
-                                }
-                            });
-                        });
-
-                } else {
-                    res.status(404).send('Other user not found!');
+                if (otherUser._id.equals(currentUser._id)) {
+                    console.log('You cannot have messages from yourself!');
+                    return res.status(404).send({error: 'You cannot have messages from yourself!'});                    
                 }
-            });
+                
+                var messageQuery = Message.find({ 
+                    $or: 
+                    [
+                     { $and:[ {'from': currentUser._id}, {'to': otherUser._id} ] },
+                     { $and:[ {'from': otherUser._id}, {'to': currentUser._id} ] }
+                    ]
+                });
+                
+                var unread = req.query.unread || false;
+                if (unread) {
+                    messageQuery.where('isRead').equals(false);
+                    messageQuery.where('from').equals(otherUser._id);
+                }
+
+                messageQuery.populate('from to', 'username firstName lastName imageUrl')
+                    .exec(function (err, messages) {
+                        if (err) {
+                            res.send(err);
+                            return log('Messages could not be loaded: ' + err);
+                        }
+
+                        res.send({messages:messages});            
+                        // Mark as read after sent
+                        messages.forEach(function (m) {
+                            if (!m.isRead && m.to._id.equals(currentUser._id)) {
+                                m.isRead = true;
+                                m.save();
+                            }
+                        });
+                    });
+
+            } else {
+                console.log('Other user not found!');
+                res.status(404).send({error:'Other user not found!'});
+            }
+        });
     },
     getMessageById: function (req, res, next) {
         // GET /api/messages/:id
@@ -125,7 +123,7 @@ module.exports = {
             if (receiver) {
                 
                 if (receiver._id.equals(sender._id)) {
-                    return res.status(404).send({message: 'You cannot send message to your self!'});                    
+                    return res.status(404).send({error: 'You cannot send message to your self!'});                    
                 }
                 
                 var message = new Message({
