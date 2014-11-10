@@ -71,5 +71,16 @@ module.exports = {
                 return res.send({ error: 'Server error' });
             }
         });
+    },
+    getContacts: function(req, res) {
+        return User.find({ username: { $ne: req.user.username } }, function (err, users) {
+            if (err) {
+                res.statusCode = 500;
+                log.error('Internal error(%d): %s',res.statusCode,err.message);
+                return res.send({ error: 'Server error' });
+            }           
+
+            return res.send({ users: users});
+        });
     }
 }

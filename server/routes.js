@@ -39,6 +39,7 @@ module.exports = function (app) {
     app.get('/api/users/currentUser', passport.authenticate('bearer', { session: false }), users.currentUser);
     app.get('/api/users/byUsername:username', passport.authenticate('bearer', { session: false }), users.byUsername);
     app.get('/api/users', passport.authenticate('bearer', { session: false }), users.getAllUsers);
+    app.get('/api/users/contacts', passport.authenticate('bearer', { session: false }), users.getContacts);
 
     app.get('/ErrorExample', function(req, res, next){
         next(new Error('Random error!'));
