@@ -17,6 +17,40 @@ module.exports = {
             city: user.city
         });
     },
+    register: function(req, res) {
+        var user = new User({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            username: req.body.username,
+            password: req.body.password,
+            location: req.body.location,
+            imageUrl: req.body.imageUrl
+        });
+
+        user.save(function (err) {
+            if (!err) {
+                log.info("User created");
+                return res.send({ 
+                    userId: user.userId,
+                    username: user.username,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    imageUrl: user.imageUrl,
+                    city: user.city
+                });
+            } else {
+                console.log(err);
+                if(err.name == 'ValidationError') {
+                    res.statusCode = 400;
+                    res.send({ error: 'Validation error' });
+                } else {
+                    res.statusCode = 500;
+                    res.send({ error: 'Server error' });
+                }
+                log.error('Internal error(%d): %s',res.statusCode,err.message);
+            }
+        });
+    },
     byUsername: function(req, res) {
         User.findOne({ username: req.params.username }).exec(function (err, user) {
             if (user) {
