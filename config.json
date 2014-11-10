@@ -1,9 +1,11 @@
 {
-    "port" : 1337,
     "security": {
         "tokenLife" : 3600
     },
-    "mongoose": {
-        "uri": "mongodb://localhost/testAPI"
+    "development": {
+        "db": "mongodb://localhost/testAPI"
+    },
+    "production": {
+        "db": "mongodb://admin:admin@ds051990.mongolab.com:51990/simplychat"
     }
 }

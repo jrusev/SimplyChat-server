@@ -5,6 +5,8 @@ var config          = require('./server/config');
 var log             = require('./server/log')(module);
 var app = express();
 
+console.log('process.env.NODE_ENV = ' + process.env.NODE_ENV);
+
 require('./server/mongoose');
 
 app.use(express.favicon());
@@ -34,6 +36,7 @@ app.use(function(err, req, res, next){
 // Configure routes
 require('./server/routes')(app);
 
-app.listen(config.get('port'), function(){
-    log.info('Express server listening on port ' + config.get('port'));
+var port = process.env.PORT || 1337;
+app.listen(port, function(){
+    log.info('Express server listening on port ' + port);
 });
